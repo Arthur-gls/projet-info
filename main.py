@@ -262,7 +262,6 @@ def main():
         
         draw_board(board)
         # Mise en surbrillance de la pièce sélectionnée et des déplacements possibles
-        """
         if selected:
             r, c = selected
             rect = pg.Rect(c * size, r * size, size, size)
@@ -270,7 +269,6 @@ def main():
             for move in valid_moves:
                 dest_rect = pg.Rect(move[3] * size, move[2] * size, size, size)
                 pg.draw.rect(screen, (255, 255, 0), dest_rect, 3)
-        """
         pg.display.flip()
     
     pg.quit()

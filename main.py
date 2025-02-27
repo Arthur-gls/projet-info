@@ -14,7 +14,7 @@ black = (0, 0, 0)
 l, L = 10, 10   # dimensions en nombre de cases
 size = 40       # taille d'une case en pixels
 
-# --- Code de damier  ---
+# Code de damier
 def damier(w, h, color, size, l, L):
     for x in range(l):
         if x % 2 == 0:
@@ -30,14 +30,14 @@ def damier(w, h, color, size, l, L):
                 rect = pg.Rect(x2, y2, w, h)
                 pg.draw.rect(screen, color, rect)
 
-# --- Initialisation du plateau de jeu ---
-# Représentation : plateau[r][c]
+# Initialisation du plateau de jeu
+
 # 0 : case vide
-# 1 : pièce "blanche" (joueur humain), 3 : dame blanche (king)
-# 2 : pièce "noire" (IA), 4 : dame noire (king)
+# 1 : pièce "blanche" (joueur humain), 3 : dame blanche
+# 2 : pièce "noire" (IA), 4 : dame noire
 def init_board():
     board = [[0 for _ in range(10)] for _ in range(10)]
-    # Placement des pièces noires sur les 4 premières lignes (sur les cases "sombres": (r+c) pair)
+    # Placement des pièces noires sur les 4 premières lignes 
     for r in range(4):
         for c in range(10):
             if (r + c) % 2 == 0:
@@ -49,7 +49,8 @@ def init_board():
                 board[r][c] = 1
     return board
 
-# --- Affichage des pièces ---
+# Affichage des pièces
+
 def draw_pieces(board):
     for r in range(10):
         for c in range(10):
@@ -67,13 +68,15 @@ def draw_pieces(board):
                     color_piece = (100, 100, 255)  # dame noire
                 pg.draw.circle(screen, color_piece, center, size // 2 - 5)
 
-# --- Affichage complet du plateau ---
+# On affiche le plateau de jeu
+
 def draw_board(board):
     screen.fill(white)
     damier(width, height, black, size, l, L)
     draw_pieces(board)
 
-# --- Récupérer les mouvements possibles d'une pièce ---
+# Récupérer les mouvements possibles d'une pièce
+
 # Chaque mouvement est représenté par un tuple (ligne_depart, col_depart, ligne_arrivée, col_arrivée, [liste_des_cases_sautées])
 def get_piece_moves(board, r, c, piece, captured=None, start=None):
     if captured is None:
@@ -82,11 +85,11 @@ def get_piece_moves(board, r, c, piece, captured=None, start=None):
         start = (r, c)
     moves = []
     # Définition des directions en fonction du type de pièce
-    if piece == 1:  # pièce blanche (non dame) : avance vers le haut
+    if piece == 1:  # pièce blanche blanche : avance vers le haut
         directions = [(-1, -1), (-1, 1)]
-    elif piece == 2:  # pièce noire (non dame) : avance vers le bas
+    elif piece == 2:  # pièce noire normale : avance vers le bas
         directions = [(1, -1), (1, 1)]
-    else:  # dames (king) : peuvent aller dans toutes les directions
+    else:  # dames : peuvent aller dans toutes les directions
         directions = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
     
     capture_found = False
@@ -127,7 +130,7 @@ def get_piece_moves(board, r, c, piece, captured=None, start=None):
                 moves.append((start[0], start[1], new_r, new_c, []))
     return moves
 
-# --- Récupérer tous les mouvements possibles pour un joueur ---
+# Récupérer tous les mouvements possibles pour un joueur (utile après pour l'IA)
 def get_all_moves(board, player):
     moves = []
     for r in range(10):
@@ -144,7 +147,7 @@ def get_all_moves(board, player):
         return capture_moves
     return moves
 
-# --- Appliquer un mouvement sur le plateau ---
+# Appliquer un mouvement sur le plateau
 def apply_move(board, move):
     new_board = copy.deepcopy(board)
     r_start, c_start, r_end, c_end, captured = move
@@ -160,7 +163,7 @@ def apply_move(board, move):
     new_board[r_end][c_end] = piece
     return new_board
 
-# --- Fonction d'évaluation du plateau ---
+# Fonction d'évaluation du plateau (pour l'algorithme minimax)
 def evaluate_board(board):
     score = 0
     for r in range(10):
@@ -175,7 +178,7 @@ def evaluate_board(board):
                 score += 1.5
     return score
 
-# --- Algorithme Minimax (profondeur limitée) ---
+# Algorithme Minimax (profondeur limitée)
 def minimax(board, depth, maximizingPlayer):
     if depth == 0:
         return evaluate_board(board), None
@@ -206,7 +209,7 @@ def minimax(board, depth, maximizingPlayer):
                 best_move = move
         return minEval, best_move
 
-# --- Boucle principale du jeu ---
+# Boucle principale du jeu
 def main():
     board = init_board()
     running = True
@@ -259,6 +262,7 @@ def main():
         
         draw_board(board)
         # Mise en surbrillance de la pièce sélectionnée et des déplacements possibles
+        """
         if selected:
             r, c = selected
             rect = pg.Rect(c * size, r * size, size, size)
@@ -266,7 +270,7 @@ def main():
             for move in valid_moves:
                 dest_rect = pg.Rect(move[3] * size, move[2] * size, size, size)
                 pg.draw.rect(screen, (255, 255, 0), dest_rect, 3)
-        
+        """
         pg.display.flip()
     
     pg.quit()
